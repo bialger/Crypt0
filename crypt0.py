@@ -16,7 +16,6 @@ def encfile (file, file1):
         cp = list(promt)
         a1 = []
         cp.pop()
-        cp.pop()
         for bt in cp:
             l = str(ord(bt)*shaint) + "'"
             a1.append(l)
