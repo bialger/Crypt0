@@ -2,8 +2,9 @@
 import hashlib
 import random
 import datetime
-print('Crypt0, версия 3.0. ', str(datetime.datetime.now()))  #Пользователь должен знать, что и когда он юзает!
-print('Программа написана Александром Бигуловым. Github: https://github.com/bialger/Crypt0')  #Как же себя любимого не показать!
+import os
+print('Crypt0, version 3.0.1 ', str(datetime.datetime.now()))  #Пользователь должен знать, что и когда он юзает!
+print('Programm is written by Alexander Bigulov(a. k. a. bialger). \nGithub: https://github.com/bialger/Crypt0')  #Как же себя любимого не показать!
 en = ['q','w','e','r','t','y','u','i','o','p','[',']',
       'a','s','d','f','g','h','j','k','l',';',"'",
       'z','x','c','v','b','n','m',',','.','/',  
@@ -22,11 +23,22 @@ def encfile (file, file1, password):
     handle = open(file, "rb")
     data = handle.readlines()
     handle.close()
+    if list(data[0])[0] == 0:
+    	print('Извините. Этот файл не может быть зашифрован по техническим причинам.')
+    	exit()
     handle1 = open(file1, "wb")
     shaint = hash(password)
-    beta = data[0]
-    for bet in data[1:]:
-    	beta +=bet
+    beta = b''.join(data)
+    bet = len(beta)
+    print('Файл имеет размер', bet/1000, 'KiB')
+    if bet > 25000000:
+        print('!!!ВНИМАНИЕ!!!')
+        print('Размер вашего файла превышет 25 мегабайт.')
+        print('Его зашифровка займет довольно большое время.')
+        c = input('Вы точно хотите продолжить?(yes/no): ')
+        cb = 'Y' in c or 'y' in c or 'YES' in c or 'yes' in c or 'Д' in c or 'д' in c or 'ДА' in c or 'да' in c
+        if cb == False: 
+            exit()
     aleph = int.from_bytes(beta, byteorder='big')
     l = aleph*shaint
     gamma = l.to_bytes((len(bin(l))// 8) + 1, byteorder='big')
@@ -48,10 +60,10 @@ def decfile (file2, file3, password):
     handle.close()
     handle1 = open(file3, "wb")
     shaint = hash(password)
-    neid = data[0]
-    for nein in data[1:]:
-    	neid += nein
-    aleph = int.from_bytes(neid, byteorder='big')
+    beta= b''.join(data)
+    bet = len(b''.join(data))
+    print('Файл имеет размер', bet/1000, 'KiB')
+    aleph = int.from_bytes(beta, byteorder='big')
     l = aleph // shaint
     gamma = l.to_bytes((len(bin(l)) // 8) + 1, byteorder='big')[1:]
     handle1.write(gamma)
@@ -63,21 +75,23 @@ def decfile (file2, file3, password):
     print('Программа закончила выполнение в', str(end))
     print('Программа работала', str(time), 'времени')
 def desfile(file):
-    handle = open(file, "w")
-    weisses_fleisch = []
-    handle.writelines(weisses_fleisch)
-    handle.close()
+    with open(file, 'rb') as f0:
+            data = f0.readlines()
+            b = 0
+            for i in data:
+                b += len(list(i))
+    for i in range(10):
+        with open(file, 'wb') as f1:
+            f1.write(os.urandom(b))
+    os.remove(file)
 try:  #Ловим прерывания от клавиатуры
-    omega = input('Введите опцию. Для зашифровки - 0, для расшифровки - любые символы: ')  #Выбор того, какой метод юзать
-    if omega == '0':  #Если нужно зашифровать
+    o = input('Зашифровать или расшифровать? (encr/decr): ')  #Выбор того, какой метод юзать
+    if o == 'e' or o == 'enc' or o =='encr' or o == 'encrypt':  #Если нужно зашифровать
         password = input('Пароль(оставте пустым для генерации надёжного пароля): ')  #Принимает или ничего, или строку, которая будет паролем.
         if password == '':  #Если ничего не ввёл юзер, захотел, чтоб мы сгенерировали пасс
             for i in range(12):  #12 символьный пароль
-                a = random.randint(0, (len(en) - 1))  #Генерируем случайное число по длине массива en - букв, знаков препинания и цифр
-                alpha = en[a]  #Берем элемент со случайным индексом
-                password += alpha  #Добавляем ЭТО в строку пароля
+                password = ''.join(random.sample(en, 12)) #Генерируем случайную строку из массива en - букв, знаков препинания и цифр
         print('Ваш пароль: '+password)  #Чтобы юзер уверился
-        print('Не забудьте его!')  #Напоминание
         file = input('Файл для шифрования: ')  #Что шифровать, сударь?
         file1 = input('Зашифрованный файл(оставте пустым для имени по умолчанию):  ')  #Куда зашифровать? 
         if file1 == '':  #Дефолтное значение - имя_исходного_файла.crypt0
@@ -87,21 +101,23 @@ try:  #Ловим прерывания от клавиатуры
             encfile(file, file1, password)  #Пытаемя вызвать метод шифрования
         except Exception:  #Смотрит на любое исключение
             print('Что-то пошло не так. Возможно, пароль неправильный или имя файла. Попробуйте перезапустить программу.')  #Сообщение об ошибке
-        xi = input('Удалить изначальный файл?. Для удаления - 0, для завершения скрипта - любые символы: ')  #Вдруг юзер захотел супер-секурности
-        if xi == '0':  #Если 0, то
-            desfile(file)  #Запускаем затирание этого файла
+        xi = input('Удалить изначальный файл? (yes/no): ')  #Вдруг юзер захотел супер-секурности
+        if xi == 'yes' or xi == 'y':  #Если 0, то
+        	try:
+        		desfile(file)  #Запускаем затирание этого файла
+        	except Exception:
+        		print('Что-то случилось с именем файла. Попробуйте перезапустить программу и указать имя файла по другому')
     else:  #Если же нужно расшифровать
         password = input('Пароль: ')  #Просим пароль
         file1 = input('Зашифрованный файл: ')  #Спрашиваем про зашифрованный файл - куда без этого
         file3 = input('Расшифрованный файл(оставте пустым для имени по умолчанию): ')  #Расшифрованный файл(возможен варисант "по умолчанию")
         try:  #Ловим любое исключение, так проще
             if file3 == '':  #Если ввод это ничего, то ....
-                afile3 = list(file1)  #Разделяем имя зашифрованного файла на символы
-                for i in range(7):  #Семь символов...  на этом моменте может случиться exception
-                    afile3.pop()  #Убираем с конца (.crypt0)
-                file3 = ''.join(afile3)  #Делаем из массива строку
+                file3 = file1[:-7]  #Делаем из массива строку
             decfile(file1, file3, password)  #Вызываем метод расшифровки
         except Exception:  #Ловим любое исключение на этом участке
             print('Что-то пошло не так. Возможно, пароль неправильный или имя файла. Попробуйте перезапустить программу.')  #Сообщение об ошибке
 except KeyboardInterrupt:
     print('\nПрограмма принудительно остановлена пользователем.', str(datetime.datetime.now()))  #Если вызвано прерывание клавиатуры - это пользователь остановил программу! Надо ему об этом сказать! И повыпендриваться с временем не забыть!
+except Exception:
+	print('Что-то пошло не так. Попрубуйте перезапустить программу')
