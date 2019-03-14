@@ -101,7 +101,7 @@ class Example(QWidget):
         grid.addWidget(btn2, 17, 1)
         self.resize(500, 500)
         self.center()
-        self.setWindowTitle('Crypt0 4.9.9 beta')
+        self.setWindowTitle('Crypt0 5.0')
         self.setWindowIcon(QIcon('zamok.jpg'))
         self.show()
         self.en = ['q','w','e','r','t','y','u','i','o','p','[',']',
