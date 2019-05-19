@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+# Made by Alexander Bigulov 19.05.2019. Github: https://github.com/bialger/Crypt0
 import hashlib
 import random
 import datetime
@@ -15,15 +16,15 @@ class Example(QWidget):
         self.initUI()
     def initUI(self):
         QToolTip.setFont(QFont('Times New Roman', 11))
-        self.setToolTip('Это моя гениальная программа')
+        self.setToolTip('Crypt0 6.0 Ausländer (Иностранец), окончательная версия от 19.05.2019')
         grid = QGridLayout()
-        grid.setSpacing(5)
+        grid.setSpacing(4)
         self.setLayout(grid)
         lbl1 = QLabel('Выберите опцию', self)
-        lbl2 = QLabel('Обязательно выберите одну из опций', self)
+        lbl2 = QLabel('Обязательно выберите одну из опций(по умолчанию - зашифровка)', self)
         self.lne = QComboBox(self)
         self.lne.addItems(["Зашифровать", "Расшифровать"])
-        x = 'Вы ничего не выбрали'
+        x = 'Применена опция по умолчанию(зашифровать)'
         self.lbl3 = QLabel(x, self)
         lbl11 = QLabel('Введите пароль', self)
         lbl21 = QLabel('Не стирайте "2)" если хотите корректной работы программы', self)
@@ -41,12 +42,12 @@ class Example(QWidget):
         x3 = 'Вы ничего не выбрали'
         self.lbl33 = QLabel(x3, self)
         lbl14 = QLabel('Удалить исходный файл?(да/нет)', self)
-        lbl24 = QLabel('Обязательно выберите опцию', self)
+        lbl24 = QLabel('Обязательно выберите опцию(по умолчанию - нет)', self)
         self.lne4 = QComboBox(self)
-        self.lne4.addItems(["Да  ", "Нет "])
-        x4 = 'Вы ничего не выбрали'
+        self.lne4.addItems(["Нет ", "Да  "])
+        x4 = 'Применена опция по умолчанию(нет)'
         self.lbl34 = QLabel(x4, self)
-        defin = QLabel('Перед тем, как запускать процесс шифрования, введите ВСЕ данные.', self)
+        #defin = QLabel('Перед тем, как запускать процесс шифрования, введите ВСЕ данные.', self)
         defin1 = QLabel('Если у Вас возникли какие-то вопросы, пишите на электронный адрес artur.bigulov@yandex.ru', self)
         btn = QPushButton("Шифровать!", self)
         btn.clicked.connect(self.buttonClicked)
@@ -64,11 +65,11 @@ class Example(QWidget):
         self.pal2 = self.lbl32.palette()
         self.pal3 = self.lbl33.palette()
         self.pal4 = self.lbl34.palette()
-        self.pal.setColor(QtGui.QPalette.WindowText, QtGui.QColor("red"))
+        self.pal.setColor(QtGui.QPalette.WindowText, QtGui.QColor("green"))
         self.pal1.setColor(QtGui.QPalette.WindowText, QtGui.QColor("red"))
         self.pal2.setColor(QtGui.QPalette.WindowText, QtGui.QColor("red"))
         self.pal3.setColor(QtGui.QPalette.WindowText, QtGui.QColor("red"))
-        self.pal4.setColor(QtGui.QPalette.WindowText, QtGui.QColor("red"))
+        self.pal4.setColor(QtGui.QPalette.WindowText, QtGui.QColor("green"))
         self.lbl3.setPalette(self.pal)
         self.lbl31.setPalette(self.pal1)
         self.lbl32.setPalette(self.pal2)
@@ -94,36 +95,36 @@ class Example(QWidget):
         grid.addWidget(lbl24, 20, 1)
         grid.addWidget(self.lne4, 21, 1)
         grid.addWidget(self.lbl34, 22, 1)
-        grid.addWidget(defin, 23, 1)
-        grid.addWidget(defin1, 24, 1)
-        grid.addWidget(btn, 25, 1)
+        #grid.addWidget(defin, 23, 1)
+        grid.addWidget(defin1, 23, 1)
+        grid.addWidget(btn, 24, 1)
         grid.addWidget(btn1, 8, 1)
         grid.addWidget(btn2, 17, 1)
         self.resize(500, 500)
         self.center()
-        self.setWindowTitle('Crypt0 5.0')
-        self.setWindowIcon(QIcon('zamok.jpg'))
+        self.setWindowTitle('Crypt0 6.0 Ausländer')
+        self.setWindowIcon(QIcon('zamok.png'))
         self.show()
-        self.en = ['q','w','e','r','t','y','u','i','o','p','[',']',
-          'a','s','d','f','g','h','j','k','l',';',
-          'z','x','c','v','b','n','m',',','.','/',  
-          '1','2','3','4','5','6','7','8','9','0','=',
-          '~','!','(',')','+',
+        self.en = ['q','w','e','r','t','y','u','i','o','p',
+          'a','s','d','f','g','h','j','k','l',
+          'z','x','c','v','b','n','m',',','.',  
+          '1','2','3','4','5','6','7','8','9','0',
+          ';','(',')','+',
           'Q','W','E','R','T','Y','U','I','O','P',
-          'A','S','D','F','G','H','J','K','L',':',
+          'A','S','D','F','G','H','J','K','L',
           'Z','X','C','V','B','N','M',]
-        self.de = ''
+        self.de = 'en'
         self.password = ''
         self.infile = ''
         self.outfile = ''
-        self.df = ''
+        self.df = 'no'
     def center(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
     def onActivated(self, text):
-        def errmsg(name, num):
+        def errmsg(num, name):
             hexnum1 = hex(num)
             zero = ''
             for i in range(11-len(hexnum1[2:])):
@@ -132,10 +133,6 @@ class Example(QWidget):
             error_dialog = QtWidgets.QErrorMessage(self)
             error_dialog.showMessage('Error! \nError number: '+hexnum+'. \nError name: '+name+'.')
         if len(text) > 4:
-    	    n = 0
-        else:
-            n = 4
-        if n == 0:
             self.pal.setColor(QtGui.QPalette.WindowText, QtGui.QColor("green"))
             self.lbl3.setPalette(self.pal)
             self.lbl3.setText('Вы выбрали: '+text)
@@ -152,7 +149,7 @@ class Example(QWidget):
             else:
                 self.df = 'no'
     def buttonClicked(self):
-        def errmsg(name, num):
+        def errmsg(num, name):
             hexnum1 = hex(num)
             zero = ''
             for i in range(11-len(hexnum1[2:])):
@@ -164,74 +161,97 @@ class Example(QWidget):
             return int(hashlib.sha512(password.encode('utf-8')).hexdigest(), 16)
         def encfile (password, infile, outfile):
             start = datetime.datetime.now()
-            with open(infile, "rb") as handle:
-                data = handle.readlines()
-                bet = len(b''.join(data))
-            if bet > 10000000:
-                reply = QMessageBox.question(self, 'Предупреждение', "Размер вашего файла превышает 10 МБайт. Вы точно хотите продолжить?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            bet = 1
+            try:
+                with open(infile, "rb") as handle:
+                    data = handle.readlines()
+                    bet = len(b''.join(data))
+            except FileNotFoundError:
+                errmsg(1638, 'There is no file like '+infile)
+                errhap = 0
+            except IsADirectoryError:
+                errmsg(636776, infile+' is a directory')
+                errhap = 0
+            if errhap != 0:
+                if bet > 10000000:
+                    reply = QMessageBox.question(self, 'Предупреждение', "Размер вашего файла превышает 10 МБайт. Вы точно хотите продолжить?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                    if reply == QMessageBox.Yes:
+                        shaint = sha512(password)
+                        beta = b''.join(data)
+                        aleph = int.from_bytes(beta, byteorder='big')
+                        l = aleph*shaint
+                        gamma = l.to_bytes((len(bin(l))// 8) + 1, byteorder='big')
+                        ac = b''
+                        for i in data[0]:
+                            if 0 == i:
+                                ac += b'\x00'
+                            else:
+                                break
+                        ab = len(ac)
+                        c = ab.to_bytes(len(bin(ab))//8 +1, byteorder='big')    
+                        c += b'\n'
+                        c += gamma
+                        with open(outfile, "wb") as handle1:
+                            handle1.write(c)
+                        end = datetime.datetime.now()
+                        time = end - start
+                        reply = QMessageBox.question(self, 'Зашифровано', "Программа работала "+str(time)+'времени.', QMessageBox.Yes)
+                        if reply == QMessageBox.Yes:
+                            pass
+                        else:
+                            pass
+        def decfile (password, infile, outfile):
+            start = datetime.datetime.now()
+            bet = 0
+            try:
+                with open(infile, "rb") as handle:
+                    data = handle.readlines()
+                    bet = len(b''.join(data))
+            except FileNotFoundError:
+                errmsg(2084375, 'There is no file like '+infile)
+                errhap = 0
+            except IsADirectoryError:
+                errmsg(86576, infile+' is a directory')
+                errhap = 0
+            if errhap != 0:
+                shaint = sha512(password)
+                a = list(data[0]).copy()
+                a.pop()
+                ac = b''
+                for i in range(a[0]):
+                    ac += b'\x00'
+                neid = b''.join(data[1:])
+                aleph = int.from_bytes(neid, byteorder='big')
+                l = aleph // shaint
+                gamma = l.to_bytes((len(bin(l)) // 8) + 1, byteorder='big')[1:]
+                ac += gamma
+                with open(outfile, "wb") as handle1:
+                    handle1.write(ac)
+                end = datetime.datetime.now()
+                time = end - start
+                reply = QMessageBox.question(self, 'Расшифровано', "Программа работала "+str(time)+'времени.', QMessageBox.Yes)
                 if reply == QMessageBox.Yes:
                     pass
                 else:
-                    exit()
-            shaint = sha512(password)
-            beta = b''.join(data)
-            aleph = int.from_bytes(beta, byteorder='big')
-            l = aleph*shaint
-            gamma = l.to_bytes((len(bin(l))// 8) + 1, byteorder='big')
-            ac = b''
-            for i in data[0]:
-                if 0 == i:
-                    ac += b'\x00'
-                else:
-                    break
-            ab = len(ac)
-            c = ab.to_bytes(len(bin(ab))//8 +1, byteorder='big')    
-            c += b'\n'
-            c += gamma
-            with open(outfile, "wb") as handle1:
-                handle1.write(c)
-            end = datetime.datetime.now()
-            time = end - start
-            reply = QMessageBox.question(self, 'Зашифровано', "Программа работала "+str(time)+'времени.', QMessageBox.Yes)
-            if reply == QMessageBox.Yes:
-                pass
-            else:
-                pass
-        def decfile (password, infile, outfile):
-            start = datetime.datetime.now()
-            with open(infile, "rb") as handle:
-                data = handle.readlines()
-                bet = len(b''.join(data))
-            shaint = sha512(password)
-            a = list(data[0]).copy()
-            a.pop()
-            ac = b''
-            for i in range(a[0]):
-                ac += b'\x00'
-            neid = b''.join(data[1:])
-            aleph = int.from_bytes(neid, byteorder='big')
-            l = aleph // shaint
-            gamma = l.to_bytes((len(bin(l)) // 8) + 1, byteorder='big')[1:]
-            ac += gamma
-            with open(outfile, "wb") as handle1:
-                handle1.write(ac)
-            end = datetime.datetime.now()
-            time = end - start
-            reply = QMessageBox.question(self, 'Расшифровано', "Программа работала "+str(time)+'времени.', QMessageBox.Yes)
-            if reply == QMessageBox.Yes:
-                pass
-            else:
-                pass
+                    pass
         def desfile(file):
-            with open(file, 'rb') as f0:
-                    data = f0.readlines()
-                    b = 0
-                    for i in data:
-                        b += len(list(i))
-            for i in range(10):
-                with open(file, 'wb') as f1:
-                    f1.write(os.urandom(b))
-            os.remove(file)
+            try:
+                with open(file, 'rb') as f0:
+                        data = f0.readlines()
+                        b = 0
+                        for i in data:
+                           b += len(list(i))
+            except FileNotFoundError:
+                errmsg(42976, 'There is no file like '+file)
+                errhap = 0
+            except IsADirectoryError:
+                errmsg(57042534, file+' is a directory')
+                errhap = 0
+            if errhap != 0:
+                for i in range(10):
+                    with open(file, 'wb') as f1:
+                        f1.write(os.urandom(b))
+                os.remove(file)
         sender = self.sender().text()
         if sender == 'Шифровать!':
             reply = QMessageBox.question(self, 'Encryption', "Вы уверены, что ввели все правильно?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -240,56 +260,39 @@ class Example(QWidget):
                     if self.outfile == 'def':
                         c = self.df
                         if 'Y' in c or 'y' in c or 'YES' in c or 'yes' in c or 'Д' in c or 'д' in c or 'ДА' in c or 'да' in c:
-                            try:
-                                encfile(self.password, self.infile, self.infile+'.crypt0')
-                                desfile(self.infile)
-                            except Exception:
-                                errmsg(1000, 'Unknown error')
+                            encfile(self.password, self.infile, self.infile+'.crypt0')
+                            desfile(self.infile)
                         else:
-                            try:
-                                encfile(self.password, self.infile, self.infile+'.crypt0')
-                            except Exception:
-                                errmsg(1010, 'Unknown error')
+                            encfile(self.password, self.infile, self.infile+'.crypt0')
                     else:
                         c = self.df
                         if 'Y' in c or 'y' in c or 'YES' in c or 'yes' in c or 'Д' in c or 'д' in c or 'ДА' in c or 'да' in c:
-                            try:
-                                encfile(self.password, self.infile, self.outfile)
-                                desfile(self.infile)
-                            except Exception:
-                                errmsg(1020, 'Unknown error')
+                            encfile(self.password, self.infile, self.outfile)
+                            desfile(self.infile)
                         else:
-                            try:
-                                encfile(self.password, self.infile, self.outfile)
-                            except Exception:
-                                errmsg(1030, 'Unknown error')
+                            encfile(self.password, self.infile, self.outfile)
                 else:
                     if self.outfile == 'def':
                         c = self.df
                         if 'Y' in c or 'y' in c or 'YES' in c or 'yes' in c or 'Д' in c or 'д' in c or 'ДА' in c or 'да' in c:
-                            try:
+                            if self.infile[:-7] != '':
                                 decfile(self.password, self.infile, self.infile[:-7])
                                 desfile(self.infile)
-                            except Exception:
-                                errmsg(1040, 'Unknown error')
+                            else:
+                                errmsg(92475, 'The name of the original file is too small for a default option')
                         else:
-                            try:
+                            if self.infile[:-7] != '':
                                 decfile(self.password, self.infile, self.infile[:-7])
-                            except Exception:
-                                errmsg(1050, 'Unknown error')
+                                desfile(self.infile)
+                            else:
+                                errmsg(834574, 'The name of the original file is too small for a default option')
                     else:
                         c = self.df
                         if 'Y' in c or 'y' in c or 'YES' in c or 'yes' in c or 'Д' in c or 'д' in c or 'ДА' in c or 'да' in c:
-                            try:
-                                decfile(self.password, self.infile, self.outfile)
-                                desfile(self.infile)
-                            except Exception:
-                                errmsg(1060, 'Unknown error')
-                        else:
-                            try:                         
-                                decfile(self.password, self.infile, self.outfile)
-                            except Exception:
-                                errmsg(1070, 'Unknown error')
+                            decfile(self.password, self.infile, self.outfile)
+                            desfile(self.infile)
+                        else:                        
+                            decfile(self.password, self.infile, self.outfile)
             else:
                 pass
         elif sender == 'Случайный пароль':
@@ -301,7 +304,7 @@ class Example(QWidget):
             self.lbl33.setPalette(self.pal3)
             self.lbl33.setText('Итоговый файл: по умолчанию')
     def onChanged(self, text):
-        def errmsg(name, num):
+        def errmsg(num, name):
             hexnum1 = hex(num)
             zero = ''
             for i in range(11-len(hexnum1[2:])):
@@ -368,76 +371,99 @@ def encfile (infile, outfile, password):
     print('Начинается шифрование...')
     start = datetime.datetime.now()
     print('Время начала шифрования', str(start))
-    with open(infile, "rb") as handle:
-        data = handle.readlines()
-        bet = len(b''.join(data))
-    print('Файл имеет размер', bet/1000, 'KiB')
-    if bet > 10000000:
-        print('!!!ВНИМАНИЕ!!!')
-        print('Размер вашего файла превышет 10 мегабайт.')
-        c = input('Вы точно хотите продолжить?(yes/no): ')
-        cb = 'Y' in c or 'y' in c or 'YES' in c or 'yes' in c or 'Д' in c or 'д' in c or 'ДА' in c or 'да' in c
-        if cb == False: 
-            exit()
-    shaint = sha512(password)
-    beta = b''.join(data)
-    aleph = int.from_bytes(beta, byteorder='big')
-    l = aleph*shaint
-    gamma = l.to_bytes((len(bin(l))// 8) + 1, byteorder='big')
-    ac = b''
-    for i in data[0]:
-        if 0 == i:
-            ac += b'\x00'
-        else:
-            break
-    ab = len(ac)
-    c = ab.to_bytes(len(bin(ab))//8 +1, byteorder='big')    
-    c += b'\n'
-    c += gamma
-    with open(outfile, "wb") as handle1:
-        handle1.write(c)
-    print('Шифрование окончено! Ваши данные в безопасности!')
-    end = datetime.datetime.now()
-    time = end - start
-    print('Программа закончила выполнение в', str(end))
-    print('Программа работала', str(time), 'времени')
+    try:
+        with open(infile, "rb") as handle:
+            data = handle.readlines()
+            bet = len(b''.join(data))
+    except FileNotFoundError:
+        print('Ошибка! Файла '+infile+'не существует!')
+        errhap = 0
+    except IsADirectoryError:
+        print('Ошибка! '+infile+' - это папка')
+        errhap = 0
+    if errhap != 0:
+        print('Файл имеет размер', bet/1000, 'KiB')
+        if bet > 10000000:
+            print('!!!ВНИМАНИЕ!!!')
+            print('Размер вашего файла превышет 10 мегабайт.')
+            c = input('Вы точно хотите продолжить?(yes/no): ')
+            cb = 'Y' in c or 'y' in c or 'YES' in c or 'yes' in c or 'Д' in c or 'д' in c or 'ДА' in c or 'да' in c
+            if cb == False: 
+                exit()
+        shaint = sha512(password)
+        beta = b''.join(data)
+        aleph = int.from_bytes(beta, byteorder='big')
+        l = aleph*shaint
+        gamma = l.to_bytes((len(bin(l))// 8) + 1, byteorder='big')
+        ac = b''
+        for i in data[0]:
+            if 0 == i:
+                ac += b'\x00'
+            else:
+                break
+        ab = len(ac)
+        c = ab.to_bytes(len(bin(ab))//8 +1, byteorder='big')    
+        c += b'\n'
+        c += gamma
+        with open(outfile, "wb") as handle1:
+            handle1.write(c)
+        print('Шифрование окончено! Ваши данные в безопасности!')
+        end = datetime.datetime.now()
+        time = end - start
+        print('Программа закончила выполнение в', str(end))
+        print('Программа работала', str(time), 'времени')
 def decfile (infile, outfile, password):
     print('Начинаем расшифровку...')
     start = datetime.datetime.now()
     print('Время начала шифрования', str(start))
-    with open(infile, "rb") as handle:
-        data = handle.readlines()
-        bet = len(b''.join(data))
-    print('Файл имеет размер', bet/1000, 'KiB')
-    shaint = sha512(password)
-    a = list(data[0]).copy()
-    a.pop()
-    ac = b''
-    for i in range(a[0]):
-        ac += b'\x00'
-    neid = b''.join(data[1:])
-    aleph = int.from_bytes(neid, byteorder='big')
-    l = aleph // shaint
-    gamma = l.to_bytes((len(bin(l)) // 8) + 1, byteorder='big')[1:]
-    ac += gamma
-    with open(outfile, "wb") as handle1:
-        handle1.write(ac)
-    print('')
-    print('Файл расшифрован.')
-    end = datetime.datetime.now()
-    time = end - start
-    print('Программа закончила выполнение в', str(end))
-    print('Программа работала', str(time), 'времени')
+    try:
+        with open(infile, "rb") as handle:
+            data = handle.readlines()
+            bet = len(b''.join(data))
+    except FileNotFoundError:
+        print('Ошибка! Файла '+infile+'не существует!')
+        errhap = 0
+    except IsADirectoryError:
+        print('Ошибка! '+infile+' - это папка')
+        errhap = 0
+    if errhap != 0:
+        print('Файл имеет размер', bet/1000, 'KiB')
+        shaint = sha512(password)
+        a = list(data[0]).copy()
+        a.pop()
+        ac = b''
+        for i in range(a[0]):
+            ac += b'\x00'
+        neid = b''.join(data[1:])
+        aleph = int.from_bytes(neid, byteorder='big')
+        l = aleph // shaint
+        gamma = l.to_bytes((len(bin(l)) // 8) + 1, byteorder='big')[1:]
+        ac += gamma
+        with open(outfile, "wb") as handle1:
+            handle1.write(ac)
+        print('Файл расшифрован.')
+        end = datetime.datetime.now()
+        time = end - start
+        print('Программа закончила выполнение в', str(end))
+        print('Программа работала', str(time), 'времени')
 def desfile(file):
-    with open(file, 'rb') as f0:
-            data = f0.readlines()
-            b = 0
-            for i in data:
-                b += len(list(i))
-    for i in range(10):
-        with open(file, 'wb') as f1:
-            f1.write(os.urandom(b))
-    os.remove(file)
+    try:
+        with open(file, 'rb') as f0:
+                data = f0.readlines()
+                b = 0
+                for i in data:
+                    b += len(list(i))
+    except FileNotFoundError:
+        print('Ошибка! Файла '+file+'не существует!')
+        errhap = 0
+    except IsADirectoryError:
+        print('Ошибка! '+file+' - это папка')
+        errhap = 0
+    if errhap != 0:
+        for i in range(10):
+            with open(file, 'wb') as f1:
+                f1.write(os.urandom(b))
+        os.remove(file)
 def encr(args):
     password = ' '
     infile = ' '
@@ -476,7 +502,7 @@ def encr(args):
         except Exception:
            print('Unknown error')
     else:
-        print('Ошибка! Неверные значения параметров!')
+        print('Ошибка! Нет значений некоторых параметров!!')
         help()
 def decr(args):
     password = ' '
@@ -528,14 +554,13 @@ if __name__ == '__main__':
         else:
             print('Неправильный первый аргумент!')
             help()
-    def errmsg(name, num):
+    def errmsg(num, name):
         hexnum1 = hex(num)
         zero = ''
         for i in range(11-len(hexnum1[2:])):
             zero += '0'
         hexnum = hexnum1[:1]+zero+hexnum1[2:]
-        error_dialog = QtWidgets.QErrorMessage(self)
-        error_dialog.showMessage('Error! \nError number: '+hexnum+'. \nError name: '+name+'.')
+        print('Error! \nError number: '+hexnum+'. \nError name: '+name+'.')
     try:
         app = QApplication(sys.argv)
         ex = Example()
