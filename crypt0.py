@@ -161,7 +161,7 @@ class Example(QWidget):
             return int(hashlib.sha512(password.encode('utf-8')).hexdigest(), 16)
         def encfile (password, infile, outfile):
             start = datetime.datetime.now()
-            bet = 1
+            errhap = 1
             try:
                 with open(infile, "rb") as handle:
                     data = handle.readlines()
@@ -202,7 +202,7 @@ class Example(QWidget):
                             pass
         def decfile (password, infile, outfile):
             start = datetime.datetime.now()
-            bet = 0
+            errhap = 1
             try:
                 with open(infile, "rb") as handle:
                     data = handle.readlines()
@@ -235,6 +235,7 @@ class Example(QWidget):
                 else:
                     pass
         def desfile(file):
+            errhap = 1
             try:
                 with open(file, 'rb') as f0:
                         data = f0.readlines()
@@ -371,6 +372,7 @@ def encfile (infile, outfile, password):
     print('Начинается шифрование...')
     start = datetime.datetime.now()
     print('Время начала шифрования', str(start))
+    errhap = 1
     try:
         with open(infile, "rb") as handle:
             data = handle.readlines()
@@ -416,6 +418,7 @@ def decfile (infile, outfile, password):
     print('Начинаем расшифровку...')
     start = datetime.datetime.now()
     print('Время начала шифрования', str(start))
+    errhap = 1
     try:
         with open(infile, "rb") as handle:
             data = handle.readlines()
@@ -447,6 +450,7 @@ def decfile (infile, outfile, password):
         print('Программа закончила выполнение в', str(end))
         print('Программа работала', str(time), 'времени')
 def desfile(file):
+    errhap = 1
     try:
         with open(file, 'rb') as f0:
                 data = f0.readlines()
