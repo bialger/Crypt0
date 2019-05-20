@@ -200,6 +200,33 @@ class Example(QWidget):
                             pass
                         else:
                             pass
+            else:
+                if errhap != 0:
+                    if 0 == 0:
+                        shaint = sha512(password)
+                        beta = b''.join(data)
+                        aleph = int.from_bytes(beta, byteorder='big')
+                        l = aleph*shaint
+                        gamma = l.to_bytes((len(bin(l))// 8) + 1, byteorder='big')
+                        ac = b''
+                        for i in data[0]:
+                            if 0 == i:
+                                ac += b'\x00'
+                            else:
+                                break
+                        ab = len(ac)
+                        c = ab.to_bytes(len(bin(ab))//8 +1, byteorder='big')    
+                        c += b'\n'
+                        c += gamma
+                        with open(outfile, "wb") as handle1:
+                            handle1.write(c)
+                        end = datetime.datetime.now()
+                        time = end - start
+                        reply = QMessageBox.question(self, 'Зашифровано', "Программа работала "+str(time)+'времени.', QMessageBox.Yes)
+                        if reply == QMessageBox.Yes:
+                            pass
+                        else:
+                            pass
         def decfile (password, infile, outfile):
             start = datetime.datetime.now()
             errhap = 1
